@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule Management  - contact</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    <meta name="description" content="ページの説明">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link href={% static 'css/style.css' %} rel="stylesheet" />
+    <link href={% static "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" %} 
+    rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <header>
+        <div id="header-container">
+            <header class="masthead" style="background-image:url({% static 'images/2.jpg' %})" >
+                <div id="outer">
+                    <div id="head-inner">
+                        <h1>すけあぷ。</h1>
+                        <h2>～スケジュール管理アプリ～</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expend-lg navbar-light"
+            id="mainNav">
+        <div class="container px-4 px-lg-5">
+        </div>
+            <button class="navbar-toggler"
+                    type="button"
+                    deta-bs-toggle="collapse"
+                    deta-bs-target="#navbarResponseive"
+                    aria-controls="navbarResponseive"
+                    aria-expended="false"
+                    aria-label="Toggle navigation">
+            </button>
+                Menu
+                <i class="collapse navbar-collapse"
+                    id="navbarResponseive">
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                        <li class="nav-item">
+                            <!-- ナビゲーションメニュー「HOME」のhrefの値を変更 -->
+                            <a class="nav-link px-lg-3 py-3 py-lg-4"
+                                href="{% url 'sceapp:index' %}">HOME</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4"
+                                href="{% url 'sceapp:study_list' %}">STUDY</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4"
+                                href="{% url 'sceapp:hobby_list' %}">HOBBY</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4"
+                                href="{% url 'sceapp:other_list' %}">OTHER</a>
+                        </li>
+
+
+                    </ul>
+
+    </nav>
+
+<div id="content-wrapper">
+
+<main>
+<aside>
+    <div id="middle-inner">
+        <div class="side-title">menu</div>
+            <div class="side">
+            </div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <strong>連絡を取りたいですか？
+                        以下のフォームに記入してメッセージを送信してください。
+                        できるだけ早くご連絡します。</strong>
+                {% if messages %}
+                <ul class="list-unstyled" style="list-style: none;">
+                    <!-- forでmessagesを取り出す -->
+                    {% for message in messages %}
+                    <!-- message.tagsが存在する場合はclass属性にCSSのクラスを設定 -->
+                    <li {%if message.tags %} class="{{ message.tags }}" {% endif %}>
+                    <!-- messageに格納されているメッセージを出力 -->
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+        
+                <!-- 以下、フォームを表示するためのコード -->
+                <div class="my-5">
+                    <!-- method="post"を追加 -->
+                    <form method="post" >
+                        <!-- CSRF対策のためのテンプレートタグ -->
+                        {% csrf_token %}
+                        <!-- formで定義されているフィールドの値を取り出す -->
+                        {% for field in form %}
+                            <div class="form-floating">
+                                <div class="form-group floating-label-form-group controls">
+                                    <!-- <label>タグを生成-->
+                                    {{ field.label_tag}}
+                                    <!-- フィールドの設定値を<input>タグで出力-->
+                                    {{ field }}
+                                    <!-- <p>を追加-->
+                                    <p class="help-block text-danger"></p>
+                                    <!-- <input>タグを削除 -->
+                                    <!-- <label>～</label>タグを削除 -->
+                                </div>
+                            </div>
+                        {% endfor %}                      
+                    <!-- <div class="control-group">～</div>までの3ブロックを削除 -->
+                    
+                        <br>
+                    <!-- 送信用のボタン -->
+                        <button type="submit"
+                                class="btn btn-primary"
+                                id="sendMessageButton">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        {% include "pagination.html" %}
+        <!-- Twitterのhref属性にURLを設定 -->
+        <li class="list-inline-item">
+            <a href="https://twitter.com/">
+                <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </li>
+        <!--  Facebookのhref属性にURLを設定 -->
+        <li class="list-inline-item">
+            <a href="https://www.facebook.com/">
+                <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </li>
+        <!--  GitHubのhref属性にURLを設定 -->
+        <li class="list-inline-item">
+            <a href="https://github.co.jp/">
+                <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </li>
+        </ul>
+        <small>Copyright&copy; <a href="index.html">Sample Company</a> All Rights Reserved.</small>
+        <span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+        
+        <footer class="border-top">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <ul class="list-inline text-center">
+                        <!-- 著作権の記載を独自のものに変更 -->
+                        <div class="small text-center text-muted fst-italic">
+                            Copyright &copy; Schedule Management 2024</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+</main>
+<hr>
+</main>
