@@ -1,28 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class ScheduleManage(models.Model):
-    
-    CATEGORY = (('study', '勉強'),
-                ('hobby', '趣味'),
-                ('other', 'その他'))
-    
-    title = models.CharField(
-        verbose_name='タイトル',
-        max_length=200
-    )
-    
-    content = models.TextField(
-        verbose_name='本文'
-    )
-    posted_at = models.DateTimeField(
-        verbose_name='投稿日時',
-        auto_now_add=True
-    )
-    category = models.CharField(
-        verbose_name='カテゴリ',
-        max_length=50,
-        choices=CATEGORY
-    )
-    
+
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-created_at"]     #投稿順にクエリを取得

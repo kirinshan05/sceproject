@@ -1,61 +1,44 @@
-from django.http import HttpResponse
-from django.shortcuts import render
-# django.views.generic.baseからListViewをインポート
-from django.views.generic import ListView,DetailView
-from .models import ScheduleManage
-from django.views.generic import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .forms import ContactForm
-from django.contrib import messages
-from django.core.mail import EmailMessage
+from django.shortcuts import render,redirect
+from .models import Post
 
-class IndexView(ListView):
-    '''トップページのビュー
+from django.views.generic import ListView,CreateView
+from django.contrib.auth.models import User
+from .models import Post
+
+from django.views.generic import FormView
+from .forms import ContactForm
+from django.core.mail import EmailMessage
+from django.contrib import messages
+
+
+
+# class Home(LoginRequiredMixin, ListView):
+#     """HOMEページで、すべてのユーザー投稿をリスト表示"""
+#     model = Post
+#     template_name = 'index.html'
     
-    テンプレートのレンダリングに特化したTemplateviewを継承
-    '''
+#     def get_queryset(self):
+#         return Post.objects.all()
     
-    template_name = 'index.html'
-    
-    context_object_name = 'orderby_records'
-    
-    queryset = ScheduleManage.objects.order_by('-posted_at')
-    
-    paginate_by = 6
-    
-class SceDetail(DetailView):
-    
-    template_name = 'post.html'
-    model = ScheduleManage
-    
-class HobbyViews(ListView):
-    template_name = 'hobby.html'
-    model = ScheduleManage
-    context_object_name = 'hobby_records'
-    queryset = ScheduleManage.objects.filter(
-        category='hobby').order_by('-posted_at')
-    paginate_by = 4
-    
-class StudyViews(ListView):
-    template_name = 'study.html'
-    model = ScheduleManage
-    context_object_name = 'study_records'
-    queryset = ScheduleManage.objects.filter(
-        category='study').order_by('-posted_at')
-    paginate_by = 4
-    
-class OtherViews(ListView):
-    template_name = 'other.html'
-    model = ScheduleManage
-    context_object_name = 'other_records'
-    queryset = ScheduleManage.objects.filter(
-        category='other').order_by('-posted_at')
-    paginate_by = 4
+
+class CreatePost(LoginRequiredMixin, CreateView):
+    """投稿フォーム"""
+    model = Post
+    template_name = 'create.html'
+    fields = ['title', 'content']
+    success_url = reverse_lazy('mypost')
+
+    def form_valid(self, form):
+        """投稿ユーザーをリクエストユーザーと紐付け"""
+        form.instance.user = self.request.user
+        return super().form_valid(form)
     
 class ContactView(FormView):
     template_name = 'contact.html'
     form_class = ContactForm
-    success_url = reverse_lazy('sceapp:contact')
+    success_url = reverse_lazy('contact')
     
     def form_valid(self, form):
         name = form.cleaned_data['name']
@@ -78,3 +61,22 @@ class ContactView(FormView):
         messages.success(
             self.request, 'お問い合わせは正常に送信されました。')
         return super().form_valid(form)
+    
+    
+class Home(LoginRequiredMixin, ListView):
+    """HOMEページで、自分以外のユーザー投稿をリスト表示"""
+    model = Post
+    template_name = 'index.html'
+
+    def get_queryset(self):
+        #リクエストユーザーのみ除外
+        return Post.objects.exclude(user=self.request.user)
+        
+    
+class MyPost(LoginRequiredMixin, ListView):
+    """自分の投稿のみ表示"""
+    model = Post
+    template_name = 'index.html'
+
+    def get_queryset(self):
+        return Post.objects.filter(user=self.request.user)

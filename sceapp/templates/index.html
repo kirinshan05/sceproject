@@ -25,31 +25,30 @@
                 </div>
             </div>
         </div>
-        {% if user.is_authenticated %}
-        <!-- ログイン中のメニュー -->
-        <li><a href="{% url 'sceapp:index' %}"
-            class="text-white">マイページ</a></li>
-        <li><a href="{% url 'accounts:logout' %}"
-            class="text-white">ログアウト</a></li>
-            {% comment %} <li><a href="{% url '#' %}"
-                class="text-white">パスワードのリセット</a></li> {% endcomment %}
-        <li><a href="mailto:admin@example.com"
-            class="text-white">Email me</a></li>
-        {% else %}
-        <!-- ログイン状態ではない場合のメニュー -->
-        <li><a href="{% url 'accounts:signup' %}"
-                class="text-white">サインアップ</a></li>
-        <li><a href="{% url 'accounts:login' %}"
-                class="text-white">ログイン</a></li>
-        <li><a href="mailto:admin@example.com"
-                class="text-white">Email me</a></li>
-        {% endif %}
-</header>
-    <!-- Navigation -->
+    </header>
+
+    <button class="navbar-toggler" 
+        type="button" data-bs-toggle="collapse" 
+        data-bs-target="#navbarNavAltMarkup" 
+        aria-controls="navbarNavAltMarkup" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button> 
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            {% comment %} <p>{{request.user.username}}さん</p> {% endcomment %}
+        {% comment %} <a class="nav-link btn btn-success" href="{% url 'create' %}" role="button">日記を書く</a>  {% endcomment %}
+        {% comment %} <a class="nav-link" href="{% url 'mypost' %}">マイリスト</a> {% endcomment %}
+        <a class="nav-link" href="/accounts/logout/">ログアウト</a>
+        {% comment %} <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'contact' %}">問い合わせ</a> {% endcomment %}
+        </div>
+    </div>
+
     <nav class="navbar navbar-expend-lg navbar-light"
             id="mainNav">
-        <div class="container px-4 px-lg-5">
-        </div>
+        <div class="container px-4 px-lg-5"></div>
             <button class="navbar-toggler"
                     type="button"
                     deta-bs-toggle="collapse"
@@ -58,91 +57,63 @@
                     aria-expended="false"
                     aria-label="Toggle navigation">
             </button>
-
-                Menu
+                
                 <i class="collapse navbar-collapse"
-                    id="navbarResponseive">
+                    id="navbarResponseive"></i>
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
                         <li class="nav-item">
-                            <!-- ナビゲーションメニュー「HOME」のhrefの値を変更 -->
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:index' %}">HOME</a>
+                                href="{% url 'home' %}">HOME</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:study_list' %}">STUDY</a>
+                                href="{% url 'create' %}">投稿する</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:hobby_list' %}">HOBBY</a>
+                                href="{% url 'contact' %}">CONTACT</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:other_list' %}">OTHER</a>
+                                href="{% url 'mypost' %}">俺の予定</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:contact' %}">CONTACT</a>
-                        </li>
-
-
                     </ul>
-
-    </nav>
-
-<div id="content-wrapper">
-
-<main>
-</main>
-<aside>
-    <div id="middle-inner">
-        <div class="side-title">このサイトについて</div>
-            <div class="side">自分のスケジュールを他の人と共有しよう！
             </div>
-        </div>
-    </div>
-    <h1>みんなのスケジュール</h1>
-    <!-- Main Content -->
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
+        </nav>
 
-                {% for record in orderby_records %}
-                <!-- Post preview -->
-                <div class="post-preview">
-                    <a href={% url 'sceapp:sce-detail' record.pk %}>
-                        <!-- 記事のタイトル -->
-                        <h2 class="post-title">
-                            {{record.title}}</h2>
-                        <!-- 投稿記事の本文 -->
-                        <h3 class="post-subtitle">
-                            <span style="font-size : 14pt">
-                                {{record.content|truncatechars:50}}
-                            </span>
-                        </h3>
-                    </a>
-                    <!-- 投稿日時とカテゴリ -->
-                    <p class="post-meta">
-                        <a href="#">Schedule Management</a>
-                        {{record.posted_at}}に投稿/カテゴリ:
-                        {{record.category}}</p>
-                    </p>
+
+    <main>
+        <div id="content-wrapper">
+            <aside>
+                <div id="middle-inner">
+                    <div class="side-title">このサイトについて</div>
+                        <div class="side">自分のスケジュールを他の人と共有しよう！
+                        </div>
+                    </div>
                 </div>
-
-                <hr class="my-4" />
-                {% endfor %}
-                <div class="d-flex justify-content-end mb-4">
-                    <a class="btn btn-primary text-uppercase" href="#!">
-                        older Posts →
-                    </a>
+            </aside>
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        {% comment %} {% block content %} {% endcomment %}
+                        <div class="container mt-3">
+                            {% for item in object_list %}
+                            <div class="alert alert-success" role="alert">
+                                <p>タイトル：<a href="#">{{item.title}}</a></p>
+                                <p>投稿者：{{item.user.username}}</p> 
+                                <p>コメント：{{object.content}}</p>   
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% comment %} {% endblock content %} {% endcomment %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-</aside>
     <footer>
-        {% include "pagination.html" %}
+        {% comment %} {% include "pagination.html" %} {% endcomment %}
         <!-- Twitterのhref属性にURLを設定 -->
         <li class="list-inline-item">
             <a href="https://twitter.com/">
@@ -170,9 +141,15 @@
                 </span>
             </a>
         </li>
-        </ul>
-        <small>Copyright&copy; <a href="index.html">Sample Company</a> All Rights Reserved.</small>
-        <span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+
+        <small>Copyright&copy; 
+            <a href="index.html">Sample Company
+            </a> All Rights Reserved.
+        </small>
+            <span class="pr">
+                <a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》
+                </a>
+            </span>
         
         <footer class="border-top">
             <div class="container px-4 px-lg-5">
@@ -186,7 +163,7 @@
                 </div>
             </div>
         </footer>
-    <script src={% static 'js/main.js' %}>
-    </script>
+    {% comment %} <script src={% static 'js/main.js' %}>
+    </script> {% endcomment %}
 </body>
 </html>

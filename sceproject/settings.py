@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+from django.contrib.messages import constants
+# import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sceapp.apps.SceappConfig',
-    'accounts.apps.AccountsConfig',
+    # 'sceproject'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +54,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', 
+
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 ROOT_URLCONF = 'sceproject.urls'
@@ -71,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'sceproject.wsgi.application'
-
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -118,16 +129,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+# STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_URL = 'static/'
 
+# STATICFILES_DIRS = [
+#         os.path.join(BASE_DIR, 'static'),
+# ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',  
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_USERNAME_REQUIRED = True 
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = True 
+
+SITE_ID = 1 
+
+LOGIN_REDIRECT_URL = 'home'#リダイレクト先をhomeページに設定。詳細後述          
+ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_TAGS ={
+    constants.SUCCESS: 'alert alert-success',
+}
+
 DEFAULT_FROM_EMAIL='moveunderstand002@gmail.com'
 EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT=587
@@ -135,4 +170,15 @@ EMAIL_HOST_USER='moveunderstand002@gmail.com'
 EMAIL_HOST_PASSWORD='mhpx ewxf kjmh iilf'
 EMAIL_USE_TLS=True
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+
+
+
+
+DEFAULT_FROM_EMAIL='moveunderstand002@gmail.com'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='moveunderstand002@gmail.com'
+EMAIL_HOST_PASSWORD='mhpx ewxf kjmh iilf'
+EMAIL_USE_TLS=True

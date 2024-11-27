@@ -31,8 +31,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expend-lg navbar-light"
             id="mainNav">
-        <div class="container px-4 px-lg-5">
-        </div>
+        <div class="container px-4 px-lg-5"></div>
             <button class="navbar-toggler"
                     type="button"
                     deta-bs-toggle="collapse"
@@ -41,44 +40,33 @@
                     aria-expended="false"
                     aria-label="Toggle navigation">
             </button>
-                Menu
+                
                 <i class="collapse navbar-collapse"
-                    id="navbarResponseive">
+                    id="navbarResponseive"></i>
                     <ul class="navbar-nav ms-auto py-4 py-lg-0">
                         <li class="nav-item">
-                            <!-- ナビゲーションメニュー「HOME」のhrefの値を変更 -->
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:index' %}">HOME</a>
+                                href="{% url 'home' %}">HOME</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:study_list' %}">STUDY</a>
+                                href="{% url 'create' %}">投稿する</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:hobby_list' %}">HOBBY</a>
+                                href="{% url 'contact' %}">CONTACT</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link px-lg-3 py-3 py-lg-4"
-                                href="{% url 'sceapp:other_list' %}">OTHER</a>
+                                href="{% url 'mypost' %}">俺の予定</a>
                         </li>
-
-
                     </ul>
-
-    </nav>
+            </div>
+        </nav>
 
 <div id="content-wrapper">
 
 <main>
-<aside>
-    <div id="middle-inner">
-        <div class="side-title">menu</div>
-            <div class="side">
-            </div>
-        </div>
-    </div>
-    <!-- Main Content -->
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
@@ -97,32 +85,19 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-        
-                <!-- 以下、フォームを表示するためのコード -->
                 <div class="my-5">
-                    <!-- method="post"を追加 -->
                     <form method="post" >
-                        <!-- CSRF対策のためのテンプレートタグ -->
                         {% csrf_token %}
-                        <!-- formで定義されているフィールドの値を取り出す -->
                         {% for field in form %}
                             <div class="form-floating">
                                 <div class="form-group floating-label-form-group controls">
-                                    <!-- <label>タグを生成-->
                                     {{ field.label_tag}}
-                                    <!-- フィールドの設定値を<input>タグで出力-->
                                     {{ field }}
-                                    <!-- <p>を追加-->
                                     <p class="help-block text-danger"></p>
-                                    <!-- <input>タグを削除 -->
-                                    <!-- <label>～</label>タグを削除 -->
                                 </div>
                             </div>
                         {% endfor %}                      
-                    <!-- <div class="control-group">～</div>までの3ブロックを削除 -->
-                    
                         <br>
-                    <!-- 送信用のボタン -->
                         <button type="submit"
                                 class="btn btn-primary"
                                 id="sendMessageButton">Send</button>
